@@ -95,9 +95,19 @@ Privacy Policy&nbsp;•&nbsp;
 var exchangeRate;
 
 function addCommas(input, decimalPlaces) {
+  // need to remember where cursor is...
+
   // can also do Number(sats).toLocaleString('en-US')
   // if it's less than $0.00, add extra zeros to USD
-  return input.toFixed(decimalPlaces).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  if (decimalPlaces >= 0) {
+    // round decimal places up or down
+    return input.toFixed(decimalPlaces).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+  else {
+    // not changing the decimal places
+    return input.toLocaleString('en-US');
+    // return input.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
 }
 
 function changeSats(dollars) {
@@ -126,6 +136,7 @@ $('#sats').bind('keyup', function () {
 
   $(this).val(addCommas(sats, 0));
   changeDollars(sats);
+  //resizeInput();
 });
 
 $('#dollars').bind('keyup', function () {
@@ -133,21 +144,50 @@ $('#dollars').bind('keyup', function () {
   dollars = parseFloat(dollars.replace(/,/g,''));
 
   // can't be more than total supply
-  if (dollars > exchangeRate * 21000000)
+  if (dollars > exchangeRate * 21000000) {
     dollars = exchangeRate * 21000000;
-
-  if (dollars < 0 || isNaN(dollars)) {
-    //$(this).val("");
-    //$('#sats').val("0");
-    return;
+    $(this).val(dollars);
   }
 
-  console.log("dollars is " + dollars);
+  if (isNaN(dollars)) {
+    // causes problems with decimal and keyup
+    console.log('hey');
+    $('#sats').val("0");
+  }
 
-  // don't want to remove decimal places while they're changing the amount :|
-  $(this).val(addCommas(dollars, 2));
+  if (dollars < 0 || isNaN(dollars)) {
+    $(this).val("");
+    $('#sats').val("0");
+    return;
+  }
+  // this doesn't work with decimal places currently...
+  //$(this).val(addCommas(dollars, -1));
   changeSats(dollars);
+  //resizeInput();
 });
+
+$('input').click(function() {
+  $(this).focus();
+  $(this).select();
+});
+
+function resizeInput() {
+  $('input').each(function() {
+    // don't want to include commas or periods
+    var length = $(this).val().length;
+    var newLength = length * 10;
+    if (newLength > 150)
+      $(this).width(length * 10);
+    console.log('sup baby');
+  });
+  /*
+  var lengthDollars = $('#dollars').val().length;
+  var lengthSats = $('#dollars').val().length;
+  console.log(length);
+  element.width(length * 10 + 10);
+  */
+}
+
 /*
 var input = document.querySelector('input'); // get the input element
 input.addEventListener('input', resizeInput); // bind the "resizeInput" callback on "input" event
@@ -169,19 +209,17 @@ function updateExchangeRate() {
 }
 
 function startHere() {
-    // set this to update periodically
     $.getJSON("https://api.coindesk.com/v1/bpi/currentprice/usd.json", function(data) {
        exchangeRate = Number(data.bpi.USD.rate_float);
        console.log(exchangeRate);
        // initialize with $1.00 to start
        changeSats(1);
     });
-    // update the exchange rate every 100 seconds
+    // updates the exchange rate every 100 seconds
     setTimeout(updateExchangeRate, 1000 * 100);
 }
 
 startHere();
-
 </script>
 </body>
 </html>
