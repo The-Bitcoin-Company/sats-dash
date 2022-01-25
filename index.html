@@ -14,7 +14,6 @@ body {
   font-family: 'Manrope', sans-serif;
   font-weight:700;
   background:linear-gradient(68.78deg,#ff6ab4 -5.3%,#ffd569 124.36%);
-  overflow: hidden;
 }
 input {
   text-align:center;
@@ -57,13 +56,6 @@ input {
     font-size:10px;
   }
 }
-/* SMALLER MOBILE */
-@media (min-width: 380px) {
-  .show-on-smallest {
-    display:none;
-  }
-}
-
 </style>
 </head>
 
@@ -85,10 +77,8 @@ input {
 
 
 <div id="footer">
-Terms of Service&nbsp;•&nbsp;
-Privacy Policy&nbsp;•&nbsp;
-<div class="show-on-smallest"></div>
-© 2022 Two Twenty Two, Inc.&nbsp;
+Terms of Service&nbsp;•&nbsp;Privacy Policy<br>
+© 2022 Two Twenty Two, Inc.
 </div>
 
 <script>
@@ -136,7 +126,7 @@ $('#sats').bind('keyup', function () {
 
   $(this).val(addCommas(sats, 0));
   changeDollars(sats);
-  //resizeInput();
+  resizeInput();
 });
 
 $('#dollars').bind('keyup', function () {
@@ -163,23 +153,36 @@ $('#dollars').bind('keyup', function () {
   // this doesn't work with decimal places currently...
   //$(this).val(addCommas(dollars, -1));
   changeSats(dollars);
-  //resizeInput();
+  resizeInput();
 });
 
 $('input').click(function() {
   $(this).focus();
   $(this).select();
+  resizeInput();
 });
 
 function resizeInput() {
+// sats is always going to be more numbers than dollars
   $('input').each(function() {
     // don't want to include commas or periods
     var length = $(this).val().length;
-    var newLength = length * 10;
-    if (newLength > 150)
-      $(this).width(length * 10);
+    console.log("length is " + length)
+    var newLength = length * 9;
+    console.log("new length of " + $(this).val() + " is " + newLength);
+    if (newLength > 100) {
+      $(this).width(newLength);
+    }
+    else
+      $(this).width(83);
     console.log('sup baby');
   });
+  console.log("dollars width is " + $('#dollars').width());
+  if ($('#dollars').width() > $('#sats').width()) {
+    console.log("dollars is greater");
+    $('#sats').width($('#dollars').width() - 24);
+  }
+  else $('#dollars').width($('#sats').width() + 24);
   /*
   var lengthDollars = $('#dollars').val().length;
   var lengthSats = $('#dollars').val().length;
