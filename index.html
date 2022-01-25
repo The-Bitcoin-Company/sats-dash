@@ -183,32 +183,16 @@ function resizeInput() {
     $('#sats').width($('#dollars').width() - 24);
   }
   else $('#dollars').width($('#sats').width() + 24);
-  /*
-  var lengthDollars = $('#dollars').val().length;
-  var lengthSats = $('#dollars').val().length;
-  console.log(length);
-  element.width(length * 10 + 10);
-  */
 }
-
-/*
-var input = document.querySelector('input'); // get the input element
-input.addEventListener('input', resizeInput); // bind the "resizeInput" callback on "input" event
-resizeInput.call(input); // immediately call the function
-
-function resizeInput() {
-  this.style.width = this.value.length + 1 + "ch";
-}
-*/
 
 function updateExchangeRate() {
-	const d = new Date();
+  const d = new Date();
   let time = d.getTime();
   $.getJSON("https://api.coindesk.com/v1/bpi/currentprice/usd.json", function(data) {
      exchangeRate = Number(data.bpi.USD.rate_float);
      console.log(exchangeRate);
   });
-	setTimeout(updateExchangeRate, 1000 * 100);
+  setTimeout(updateExchangeRate, 1000 * 100);
 }
 
 function startHere() {
