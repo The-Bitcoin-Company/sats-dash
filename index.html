@@ -15,6 +15,15 @@ body {
   font-weight:700;
   background:linear-gradient(68.78deg,#ff6ab4 -5.3%,#ffd569 124.36%);
 }
+a {
+  text-decoration:none;
+  color:white;
+  padding-left:5px;
+  padding-right:5px;
+}
+a:hover {
+  text-decoration:underline;
+}
 input {
   text-align:center;
   font-family: 'Manrope', sans-serif;
@@ -42,7 +51,7 @@ input {
   font-weight:500; font-size:13px; position:absolute; bottom:20px; text-align:center; width:100%; left:0px;
 }
 #logo {
-  width:160px; margin-top:30px;
+  width:100px; margin-top:30px;
 }
 /* DESKTOP VIEW */
 @media (min-width: 600px) {
@@ -71,8 +80,7 @@ input {
 <body>
 <center>
 
-<img src=https://thebitcoincompany.com/assets/img/logos/tbc.svg style="width:100px; margin-top:30px">
-<!--img id="logo" src=honey.png-->
+<a href=https://thebitcoincompany.com><img id="logo" src=https://thebitcoincompany.com/assets/img/logos/tbc.svg></a>
 
 <div style="margin-top:40px; margin-bottom:30px">
 <h1>Sats Dash</h1>
@@ -87,7 +95,7 @@ input {
 
 
 <div id="footer">
-Terms of Service&nbsp;•&nbsp;Privacy Policy<br>
+<a href=https://thebitcoincompany.com/terms>Terms of Service</a> • <a href=https://thebitcoincompany.com/privacy>Privacy Policy</a><br>
 © 2022 Two Twenty Two, Inc.
 </div>
 
@@ -179,20 +187,24 @@ function resizeInput() {
     var length = $(this).val().length;
     console.log("length is " + length)
     var newLength = length * 9;
-    console.log("new length of " + $(this).val() + " is " + newLength);
-    if (newLength > 90) {
+    console.log("new length of " + $(this).attr('id') + " is " + newLength);
+    if (newLength > 98) {
       $(this).width(newLength);
     }
-    else
+    else {
+      console.log("inside else");
       $(this).width(83);
-    console.log('sup baby');
+    }
   });
   console.log("dollars width is " + $('#dollars').width());
   if ($('#dollars').width() > $('#sats').width()) {
     console.log("dollars is greater");
     $('#sats').width($('#dollars').width() - 24);
   }
-  else $('#dollars').width($('#sats').width() + 24);
+  else {
+    $('#dollars').width($('#sats').width() + 24);
+    console.log('length of sats is longer');
+  }
 }
 
 function updateExchangeRate() {
