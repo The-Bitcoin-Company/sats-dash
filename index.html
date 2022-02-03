@@ -134,8 +134,8 @@ $('#sats').bind('keyup', function () {
   sats = parseInt(sats.replace(/,/g,''));
 
   // there will never be more than 2,100,000,000,000,000 satoshis!
-  if (sats > 2100000000000000)
-    sats = 2100000000000000;
+  if (sats > 2099999997690000)
+    sats = 2099999997690000;
 
   if (sats < 0 || isNaN(sats)) {
     $(this).val("");
