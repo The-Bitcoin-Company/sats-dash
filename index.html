@@ -102,10 +102,10 @@ input {
 
 <script>
 var exchangeRate;
+const maxBTC = 2099999997690000 / 100000000;
 
 function addCommas(input, decimalPlaces) {
   // need to remember where cursor is...
-
   // can also do Number(sats).toLocaleString('en-US')
   // if it's less than $0.00, add extra zeros to USD
   if (decimalPlaces >= 0) {
@@ -133,7 +133,7 @@ $('#sats').bind('keyup', function () {
   var sats = $(this).val();
   sats = parseInt(sats.replace(/,/g,''));
 
-  // there will never be more than 2,100,000,000,000,000 satoshis!
+  // there will never be more than 2,099,999,997,690,000 satoshis!
   if (sats > 2099999997690000)
     sats = 2099999997690000;
 
@@ -153,8 +153,8 @@ $('#dollars').bind('keyup', function () {
   dollars = parseFloat(dollars.replace(/,/g,''));
 
   // can't be more than total supply
-  if (dollars > exchangeRate * 21000000) {
-    dollars = exchangeRate * 21000000;
+  if (dollars > exchangeRate * maxBTC) {
+    dollars = exchangeRate * maxBTC;
     $(this).val(dollars);
   }
 
@@ -186,25 +186,21 @@ function resizeInput() {
   $('input').each(function() {
     // don't want to include commas or periods
     var length = $(this).val().length;
-    console.log("length is " + length)
     var newLength = length * 9;
-    console.log("new length of " + $(this).attr('id') + " is " + newLength);
+    // console.log("new length of " + $(this).attr('id') + " is " + newLength);
     if (newLength > 98) {
       $(this).width(newLength);
     }
     else {
-      console.log("inside else");
       $(this).width(83);
     }
   });
   console.log("dollars width is " + $('#dollars').width());
   if ($('#dollars').width() > $('#sats').width()) {
-    console.log("dollars is greater");
     $('#sats').width($('#dollars').width() - 24);
   }
   else {
     $('#dollars').width($('#sats').width() + 24);
-    console.log('length of sats is longer');
   }
 }
 
